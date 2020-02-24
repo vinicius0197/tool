@@ -30,39 +30,34 @@ const CardListStyle = styled.div`
 const CardList = (props) => {
   const [cards, setCards] = useState([]);
 
-  const [{ isOver, item, didDrop }, drop] = useDrop({
+  const [{ isOver, item }, drop] = useDrop({
     accept: ItemTypes.CARD,
-    drop: () => updateCardList(item.cardData),
+    drop: () => updateCardList(item),
     collect: monitor => ({
       isOver: !!monitor.isOver(),
       item: monitor.getItem(),
-      didDrop: monitor.didDrop(),
     }),
   });
 
-  const updateCardList = (newItem) => {
-    setCards([...cards, newItem]);
-    console.log(cards);
+  const updateCardList = (item) => {
+    props.handleStateChange(item, props.id);
   }
 
   const handleCards = cards => {
     setCards(cards);
   };
 
-  if(didDrop) {
-    alert('dropped');
-  }
-
   useEffect(() => {
     handleCards(props.cards);
-  }, []);
+  }, [props.cards]);
 
   return(
     <ListWrapper>
       <CardListStyle
         ref={drop}
       >
-        {cards.map(card => <Card key={card.id} cardData={card} />)}
+        { props.title }
+        {cards.map(card => <Card key={card.id} cardData={card} parent={props.id} />)}
       </CardListStyle>
     </ListWrapper>
   );
