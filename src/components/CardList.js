@@ -27,15 +27,16 @@ const CardListStyle = styled.div`
   padding: 4px;
 `;
 
-const CardList = () => {
+const CardList = (props) => {
   const [cards, setCards] = useState([]);
 
-  const [{ isOver, item }, drop] = useDrop({
+  const [{ isOver, item, didDrop }, drop] = useDrop({
     accept: ItemTypes.CARD,
     drop: () => updateCardList(item.cardData),
     collect: monitor => ({
       isOver: !!monitor.isOver(),
       item: monitor.getItem(),
+      didDrop: monitor.didDrop(),
     }),
   });
 
@@ -48,8 +49,12 @@ const CardList = () => {
     setCards(cards);
   };
 
+  if(didDrop) {
+    alert('dropped');
+  }
+
   useEffect(() => {
-    handleCards([{id: 1, text: 'some text'}, {id: 2, text: 'more text'}]);
+    handleCards(props.cards);
   }, []);
 
   return(
