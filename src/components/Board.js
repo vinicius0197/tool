@@ -4,7 +4,7 @@ import CardList from './CardList';
 const mockData = [
   {
     id: 1,
-    position: 1,
+    position: 0,
     title: 'some title',
     cards: [
       {
@@ -19,7 +19,7 @@ const mockData = [
   },
   {
     id: 2,
-    position: 2,
+    position: 1,
     title: 'mew title',
     cards: [
       {
@@ -30,7 +30,7 @@ const mockData = [
   },
   {
     id: 3,
-    position: 3,
+    position: 2,
     title: 'some big cool title',
     cards: [
       {
@@ -57,36 +57,34 @@ const Board = () => {
     const newCardLists = [...cardLists];
     
     // this line of code removes the item from the original card list
-    newCardLists[item.parent-1].cards = newCardLists[item.parent-1].cards.filter(el => el.id !== item.cardData.id);
-
+    newCardLists[item.parentPosition].cards = newCardLists[item.parentPosition].cards.filter(el => el.id !== item.cardData.id);
     // this line of code adds the item to new list
-    newCardLists[to-1].cards = [...newCardLists[to-1].cards, item.cardData];
+    newCardLists[to].cards = [...newCardLists[to].cards, item.cardData];
     setCardLists(newCardLists);
   };
 
   const handleListOrder = (itemList, droppedOn) => {
-    // TODO: change id of lists so that it gets updated with new position every time
-    // a list reorder occurs
-    console.log('handleListOrder', itemList, droppedOn);
     const newOrderList = [...cardLists];
-    const prevId = itemList.id - 1;
-    const newId = droppedOn - 1;
+    const prevId = itemList.position;
+    const newId = droppedOn;
 
     const toMove = newOrderList[prevId];
 
     if(newId > prevId) {
       for(let i = prevId; i < newId; i++) {
         newOrderList[i] = newOrderList[i+1];
+        newOrderList[i].position = i;
       }
     } else {
       for(let i = prevId; i > newId; i--) {
         newOrderList[i] = newOrderList[i-1];
+        newOrderList[i].position = i;
       }
     }
 
     newOrderList[newId] = toMove;
+    newOrderList[newId].position = newId;
 
-    console.log('my new list', newOrderList);
     setCardLists(newOrderList);
   };
 
@@ -97,6 +95,7 @@ const Board = () => {
           <CardList
             key={cardList.id}
             id={cardList.id}
+            position={cardList.position}
             title={cardList.title}
             cards={cardList.cards}
             handleStateChange={handleStateChange}

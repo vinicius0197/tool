@@ -51,18 +51,18 @@ const CardList = (props) => {
   });
 
   const[{ isDragging }, drag] = useDrag({
-    item: { type: ItemTypes.LIST, id: props.id },
+    item: { type: ItemTypes.LIST, id: props.id, position: props.position },
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),
     }),
   });
 
   const updateCardList = (item) => {
-    props.handleStateChange(item, props.id);
+    props.handleStateChange(item, props.position);
   }
 
   const updateListOrder = (listItem) => {
-    props.handleListOrder(listItem, props.id);
+    props.handleListOrder(listItem, props.position);
   };
 
   const handleCards = cards => {
@@ -83,7 +83,7 @@ const CardList = (props) => {
             ref={drop}
           >
             { props.title }
-            {cards.map(card => <Card key={card.id} cardData={card} parent={props.id} />)}
+            {cards.map(card => <Card key={card.id} cardData={card} parent={props.id} parentPosition={props.position} />)}
           </CardListStyle>
         </ListWrapper>
       </div>

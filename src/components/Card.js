@@ -17,7 +17,7 @@ const CardStyle = styled.div`
 
 const Card = (props) => {
   const[{ isDragging }, drag] = useDrag({
-    item: { type: ItemTypes.CARD, cardData: props.cardData, parent: props.parent },
+    item: { type: ItemTypes.CARD, cardData: props.cardData, parent: props.parent, parentPosition: props.parentPosition },
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),
     }),
