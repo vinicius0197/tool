@@ -4,6 +4,7 @@ import CardList from './CardList';
 const mockData = [
   {
     id: 1,
+    position: 1,
     title: 'some title',
     cards: [
       {
@@ -18,6 +19,7 @@ const mockData = [
   },
   {
     id: 2,
+    position: 2,
     title: 'mew title',
     cards: [
       {
@@ -28,6 +30,7 @@ const mockData = [
   },
   {
     id: 3,
+    position: 3,
     title: 'some big cool title',
     cards: [
       {
@@ -61,6 +64,32 @@ const Board = () => {
     setCardLists(newCardLists);
   };
 
+  const handleListOrder = (itemList, droppedOn) => {
+    // TODO: change id of lists so that it gets updated with new position every time
+    // a list reorder occurs
+    console.log('handleListOrder', itemList, droppedOn);
+    const newOrderList = [...cardLists];
+    const prevId = itemList.id - 1;
+    const newId = droppedOn - 1;
+
+    const toMove = newOrderList[prevId];
+
+    if(newId > prevId) {
+      for(let i = prevId; i < newId; i++) {
+        newOrderList[i] = newOrderList[i+1];
+      }
+    } else {
+      for(let i = prevId; i > newId; i--) {
+        newOrderList[i] = newOrderList[i-1];
+      }
+    }
+
+    newOrderList[newId] = toMove;
+
+    console.log('my new list', newOrderList);
+    setCardLists(newOrderList);
+  };
+
   const renderCardLists = () => {
     return(
       cardLists.map(cardList => {
@@ -71,6 +100,7 @@ const Board = () => {
             title={cardList.title}
             cards={cardList.cards}
             handleStateChange={handleStateChange}
+            handleListOrder={handleListOrder}
           />
         );
       })

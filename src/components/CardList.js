@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useDrop } from 'react-dnd';
+import { useDrop, useDrag } from 'react-dnd';
 
 import Card from './Card';
 import ItemTypes from '../constants/ItemTypes';
+import CardListWrapper from './CardListWrapper';
 
 const ListWrapper = styled.div`
   width: 272px;
@@ -13,6 +14,7 @@ const ListWrapper = styled.div`
   display: inline-block;
   vertical-align: top;
   white-space: nowrap;
+  cursor: pointer;
 `;
 
 const CardListStyle = styled.div`
@@ -39,9 +41,29 @@ const CardList = (props) => {
     }),
   });
 
+  const [{ isOverList, itemList }, dropList] = useDrop({
+    accept: ItemTypes.LIST,
+    drop: () => updateListOrder(itemList),
+    collect: monitor => ({
+      isOverList: !!monitor.isOver(),
+      itemList: monitor.getItem(),
+    }),
+  });
+
+  const[{ isDragging }, drag] = useDrag({
+    item: { type: ItemTypes.LIST, id: props.id },
+    collect: monitor => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  });
+
   const updateCardList = (item) => {
     props.handleStateChange(item, props.id);
   }
+
+  const updateListOrder = (listItem) => {
+    props.handleListOrder(listItem, props.id);
+  };
 
   const handleCards = cards => {
     setCards(cards);
@@ -52,14 +74,20 @@ const CardList = (props) => {
   }, [props.cards]);
 
   return(
-    <ListWrapper>
-      <CardListStyle
-        ref={drop}
-      >
-        { props.title }
-        {cards.map(card => <Card key={card.id} cardData={card} parent={props.id} />)}
-      </CardListStyle>
-    </ListWrapper>
+    <CardListWrapper>
+      <div ref={dropList}>
+        <ListWrapper
+          ref={drag}
+        >
+          <CardListStyle
+            ref={drop}
+          >
+            { props.title }
+            {cards.map(card => <Card key={card.id} cardData={card} parent={props.id} />)}
+          </CardListStyle>
+        </ListWrapper>
+      </div>
+    </CardListWrapper>
   );
 };
 
