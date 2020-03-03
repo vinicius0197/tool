@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
+import boardsReducer from './boardsReducer';
 
 export default combineReducers({
-  dumb: 'dumb'
+  board: boardsReducer
 });

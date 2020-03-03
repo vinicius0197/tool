@@ -73,21 +73,29 @@ const CardList = (props) => {
     handleCards(props.cards);
   }, [props.cards]);
 
-  return(
-    <CardListWrapper>
-      <div ref={dropList}>
-        <ListWrapper
-          ref={drag}
-        >
-          <CardListStyle
-            ref={drop}
+  const renderCards = () => {
+    return(
+      <CardListWrapper>
+        <div ref={dropList}>
+          <ListWrapper
+            ref={drag}
           >
-            { props.title }
-            {cards.map(card => <Card key={card.id} cardData={card} parent={props.id} parentPosition={props.position} />)}
-          </CardListStyle>
-        </ListWrapper>
-      </div>
-    </CardListWrapper>
+            <CardListStyle
+              ref={drop}
+            >
+              { props.title }
+              {cards.map(card => <Card key={card.id} cardData={card} parent={props.id} parentPosition={props.position} />)}
+            </CardListStyle>
+          </ListWrapper>
+        </div>
+      </CardListWrapper>
+    );
+  };
+
+  return(
+    <React.Fragment>
+      { renderCards() }
+    </React.Fragment>
   );
 };
 
