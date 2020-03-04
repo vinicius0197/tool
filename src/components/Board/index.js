@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getBoard, moveCard, moveList } from '../actions';
+import { getBoard, moveCard, moveList } from '../../actions';
 
-import CardList from './CardList';
+import CardList from '../CardList';
 
 const Board = (props) => {
   useEffect(() => {

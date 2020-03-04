@@ -1,33 +1,27 @@
 import React from 'react';
-import styled from 'styled-components';
 import { useDrop, useDrag } from 'react-dnd';
 
-import Card from './Card';
-import ItemTypes from '../constants/ItemTypes';
-import CardListWrapper from './CardListWrapper';
+import Card from '../Card';
+import ItemTypes from '../../constants/ItemTypes';
+import { ListWrapper, CardListStyle } from './styles';
 
-const ListWrapper = styled.div`
-  width: 272px;
-  margin: 0 4px;
-  height: 100%;
-  box-sizing: border-box;
-  display: inline-block;
-  vertical-align: top;
-  white-space: nowrap;
-  cursor: pointer;
-`;
+const CardListWrapper = (props) => {
+  const [{ isOver, item }, drop] = useDrop({
+    accept: ItemTypes.CARD,
+    collect: monitor => ({
+      isOver: !!monitor.isOver(),
+      item: monitor.getItem(),
+    }),
+  });
 
-const CardListStyle = styled.div`
-  background-color: #ebecf0;
-  border-radius: 3px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  max-height: 100%;
-  position: relative;
-  white-space: normal;
-  padding: 4px;
-`;
+  return(
+    <div
+      ref={drop}
+    >
+      { props.children }
+    </div>
+  );
+};
 
 const CardList = (props) => {
   const [{ isOver, item }, drop] = useDrop({
