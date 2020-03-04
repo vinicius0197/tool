@@ -1,23 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getBoard, moveCard, moveList } from '../actions';
 
 import CardList from './CardList';
 
 const Board = (props) => {
-  const [cardLists, setCardLists] = useState([]);
-
-  const handleCardLists = (cardLists) => {
-    setCardLists(cardLists);
-  };
-
   useEffect(() => {
     props.getBoard();
   }, []);
 
   // Receives item data (with parent id) and the id of list to which item is being moved to
-  const handleStateChange = (item, to) => {
-    const newCardLists = [...props.board[0]];
+  const moveCard = (item, to) => {
+    const newCardLists = [...props.lists];
     
     // this line of code removes the item from the original card list
     newCardLists[item.parentPosition].cards = newCardLists[item.parentPosition].cards.filter(el => el.id !== item.cardData.id);
@@ -27,8 +21,8 @@ const Board = (props) => {
     props.moveCard(newCardLists);
   };
 
-  const handleListOrder = (itemList, droppedOn) => {
-    const newOrderList = [...props.board[0]];
+  const moveList = (itemList, droppedOn) => {
+    const newOrderList = [...props.lists];
     const prevId = itemList.position;
     const newId = droppedOn;
 
@@ -53,9 +47,9 @@ const Board = (props) => {
   };
 
   const renderCardLists = () => {
-    if(props.board[0]) {
+    if(props.lists) {
       return(
-        props.board[0].map(cardList => {
+        props.lists.map(cardList => {
           return(
             <CardList
               key={cardList.id}
@@ -63,8 +57,8 @@ const Board = (props) => {
               position={cardList.position}
               title={cardList.title}
               cards={cardList.cards}
-              handleStateChange={handleStateChange}
-              handleListOrder={handleListOrder}
+              moveCard={moveCard}
+              moveList={moveList}
             />
           );
         })
@@ -83,7 +77,7 @@ const Board = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    board: state.board
+    lists: state.board.lists
   };
 };
 

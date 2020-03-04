@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { useDrop, useDrag } from 'react-dnd';
 
@@ -30,8 +30,6 @@ const CardListStyle = styled.div`
 `;
 
 const CardList = (props) => {
-  const [cards, setCards] = useState([]);
-
   const [{ isOver, item }, drop] = useDrop({
     accept: ItemTypes.CARD,
     drop: () => updateCardList(item),
@@ -58,20 +56,12 @@ const CardList = (props) => {
   });
 
   const updateCardList = (item) => {
-    props.handleStateChange(item, props.position);
+    props.moveCard(item, props.position);
   }
 
   const updateListOrder = (listItem) => {
-    props.handleListOrder(listItem, props.position);
+    props.moveList(listItem, props.position);
   };
-
-  const handleCards = cards => {
-    setCards(cards);
-  };
-
-  useEffect(() => {
-    handleCards(props.cards);
-  }, [props.cards]);
 
   const renderCards = () => {
     return(
@@ -84,7 +74,7 @@ const CardList = (props) => {
               ref={drop}
             >
               { props.title }
-              {cards.map(card => <Card key={card.id} cardData={card} parent={props.id} parentPosition={props.position} />)}
+              {props.cards.map(card => <Card key={card.id} cardData={card} parent={props.id} parentPosition={props.position} />)}
             </CardListStyle>
           </ListWrapper>
         </div>
