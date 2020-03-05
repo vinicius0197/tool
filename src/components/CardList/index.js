@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useDrop, useDrag } from 'react-dnd';
 
 import Card from '../Card';
+import CardDragLayer from '../Card/CardDragLayer';
 import ItemTypes from '../../constants/ItemTypes';
 import { ListWrapper, CardListStyle } from './styles';
 
@@ -26,7 +27,14 @@ const CardListWrapper = (props) => {
 const CardList = (props) => {
   const [{ isOver, item }, drop] = useDrop({
     accept: ItemTypes.CARD,
-    drop: () => updateCardList(item),
+    drop: (item, monitor) => {
+      // const delta = monitor.getDifferenceFromInitialOffset();
+      // let left = Math.round(item.left + delta.x);
+      // let top = Math.round(item.top + delta.y);
+      // handleCard(item.id, left, top);
+      updateCardList(item);
+      return undefined;
+    },
     collect: monitor => ({
       isOver: !!monitor.isOver(),
       item: monitor.getItem(),
@@ -68,7 +76,12 @@ const CardList = (props) => {
               ref={drop}
             >
               { props.title }
-              {props.cards.map(card => <Card key={card.id} cardData={card} parent={props.id} parentPosition={props.position} />)}
+              {props.cards.map(card =>
+                <React.Fragment>
+                  <Card key={card.id} cardData={card} parent={props.id} parentPosition={props.position} />
+                  <CardDragLayer />
+                </React.Fragment>
+              )}
             </CardListStyle>
           </ListWrapper>
         </div>
