@@ -2,7 +2,9 @@ import mockData from '../constants/mock';
 import {
   GET_BOARD,
   MOVE_CARD,
-  MOVE_LIST
+  MOVE_LIST,
+  GET_CARD_OFFSET,
+  UPDATE_CARD_OFFSET
 } from './types';
 
 export const getBoard = () => {
@@ -25,4 +27,18 @@ export const moveList = (orderedList) => {
     type: MOVE_LIST,
     payload: orderedList
   };
+};
+
+export const getCardOffset = (id, top, left) => {
+  return {
+    type: GET_CARD_OFFSET,
+    payload: { id, top, left }
+  };
+};
+
+export const updateCardOffset = (id, top, left) => {
+  return {
+    type: UPDATE_CARD_OFFSET,
+    payload: { id, top, left }
+  }
 };

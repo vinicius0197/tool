@@ -1,24 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDrag } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 
 import { CardStyle } from './styles';
 import ItemTypes from '../../constants/ItemTypes';
 
-const getStyles = (left, top, isDragging) => {
-  const transform = `translate3d(${left}px, ${top}px, 0)`;
+const getStyles = (isDragging) => {
+  // const transform = `translate3d(${left}px, ${top}px, 0)`;
   return {
-    position: 'absolute',
-    transform,
-    WebkitTransform: transform,
-    // IE fallback: hide the real node using CSS when dragging
-    // because IE will ignore our custom "empty image" drag preview.
     opacity: isDragging ? 0 : 1,
-    height: isDragging ? 0 : '',
+    // height: isDragging ? 0 : '',
   };
 };
 
 const Card = (props) => {
+  const cardRef = useRef(null);
   const[{ isDragging }, drag, preview] = useDrag({
     item: { type: ItemTypes.CARD, cardData: props.cardData, parent: props.parent, parentPosition: props.parentPosition },
     collect: monitor => ({
@@ -27,11 +23,16 @@ const Card = (props) => {
   });
 
   useEffect(() => {
-    preview(getEmptyImage(), { captureDraggingState: true })
+    let { top, left } = cardRef.current.getBoundingClientRect();
+    props.getCardPosition(props.cardData.id, top, left);
+  }, []);
+
+  useEffect(() => {
+    preview(getEmptyImage(), { captureDraggingState: true });
   });
 
   return(
-    <div>
+    <div ref={cardRef} style={getStyles(isDragging)}>
       <CardStyle
         ref={drag}
       >

@@ -6,11 +6,11 @@ const mockData = [
     cards: [
       {
         id: 1,
-        text: 'this is my todo'
+        text: 'todo #1'
       },
       {
         id: 2,
-        text: 'this is some other todo'
+        text: 'todo #2'
       },
     ]
   },
@@ -21,7 +21,7 @@ const mockData = [
     cards: [
       {
         id: 3,
-        text: 'this is my todo'
+        text: 'todo #3'
       },
     ]
   },
@@ -32,7 +32,7 @@ const mockData = [
     cards: [
       {
         id: 4,
-        text: 'this is my todo'
+        text: 'todo #4'
       },
     ]
   }
